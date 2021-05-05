@@ -69,8 +69,8 @@ public class Model {
 				}
 			}
 		}
-		System.out.format("Grafo creato con %d vertici e %d archi\n",
-				this.grafo.vertexSet().size(), this.grafo.edgeSet().size()) ;
+		//System.out.format("Grafo creato con %d vertici e %d archi\n",
+		//		this.grafo.vertexSet().size(), this.grafo.edgeSet().size()) ;
 		
 	}
 	
@@ -110,18 +110,21 @@ public class Model {
 	public String printGraph(Graph grafo1) {
 		String result ="";
 		Set<Airport> vertice = new HashSet( grafo1.vertexSet());
+		Set<DefaultEdge> edge = new HashSet(grafo1.edgeSet());
 		
 		for(Flight f : flights) {
-			Airport a1 =mapa.get(f.getDestinationAirportId());
-			Airport a2 = mapa.get(f.getOriginAirportId());
+			Airport a1 = mapa.get(f.getOriginAirportId());
+			Airport a2 = mapa.get(f.getDestinationAirportId());
 			int distance = f.getDistance();
-			if(grafo1.containsEdge(a1, a2) || grafo1.containsEdge(a2, a1)) {
-				result+=a1.getAirportName()+" - "+a2.getAirportName()+"  : "+distance+"\n";
-				
+			if(edge.contains(grafo1.getEdge(a1, a2))) {
+					edge.remove(grafo1.getEdge(a1, a2));
+					result+=a1.getAirportName()+" - "+a2.getAirportName()+"  : "+distance+"\n";
+			}else if (edge.contains(grafo.getEdge(a2, a1))) {
+				edge.remove(grafo1.getEdge(a2, a1));
+			result+=a2.getAirportName()+" - "+a1.getAirportName()+"  : "+distance+"\n";
 			}
-			
+				
 		}
-		
 		
 		return result;
 		
