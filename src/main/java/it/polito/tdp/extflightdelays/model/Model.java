@@ -62,7 +62,7 @@ public class Model {
 				int destinationAirportID = f.getDestinationAirportId();
 				Airport a1 = mapa.get(originAirportID);
 				Airport a2 = mapa.get(destinationAirportID);
-				if(mapa.containsKey(originAirportID) && mapa.containsKey(destinationAirportID) && !grafo.containsEdge(a1, a2) && !grafo.containsEdge(a2,a1)) {
+				if(mapa.containsKey(originAirportID) && mapa.containsKey(destinationAirportID) && !grafo.containsEdge(a1, a2) && !grafo.containsEdge(a2,a1) && a1!=a2) {
 					grafo.setEdgeWeight(grafo.addEdge(a1, a2), getDistance(a1,a2));
 					//System.out.println("Aggiunto "+a1.getAirportName()+"("+a1.getId()+")"+" "+a2.getAirportName()+"("+a2.getId()+")"+"\n");
 					System.out.println(a1.getAirportName()+" - "+a2.getAirportName()+" : "+f.getDistance());
@@ -110,15 +110,19 @@ public class Model {
 	public String printGraph(Graph grafo1) {
 		String result ="";
 		Set<Airport> vertice = new HashSet( grafo1.vertexSet());
-		for(Airport a1 : vertice) {
-			for(Airport a2 : vertice) {
-				if(grafo1.containsEdge(grafo1.getEdge(a1, a2))||grafo1.containsEdge(grafo1.getEdge(a2, a1))) {
-					result+=a1.getAirportName()+" - "+a2.getAirportName()+" : "+getDistance(a1,a2)+"\n";
-				}
-				
+		
+		for(Flight f : flights) {
+			Airport a1 =mapa.get(f.getDestinationAirportId());
+			Airport a2 = mapa.get(f.getOriginAirportId());
+			int distance = f.getDistance();
+			if(grafo1.containsEdge(a1, a2) || grafo1.containsEdge(a2, a1)) {
+				result+=a1.getAirportName()+" - "+a2.getAirportName()+"  : "+distance+"\n";
 				
 			}
+			
 		}
+		
+		
 		return result;
 		
 		
